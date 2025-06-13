@@ -10,12 +10,17 @@ const Footer = ({
   showSocialMedia = true,
   showLegalLinks = true,
   showCopyright = true,
-  className = ""
+  className = "",
+  ...props
 }) => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className={`space-y-4 ${className}`}>
+    <footer
+      className={`space-y-4 ${className}`}
+      data-netlify-visual-editor-block="Footer"
+      {...props}
+    >
       {/* Social Media Icons */}
       {showSocialMedia && (
         <div className="flex justify-center gap-6">

@@ -1,3 +1,45 @@
 [build]
-  publish = ".next"
   command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+# Netlify Visual Editor Configuration
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[context.production]
+  environment = { NODE_ENV = "production" }
+
+[context.deploy-preview]
+  environment = { NODE_ENV = "production" }
+
+[context.branch-deploy]
+  environment = { NODE_ENV = "production" }
+
+# Visual Editor specific settings
+[dev]
+  framework = "next"
+  command = "npm run dev"
+  port = 3000
+
+# Headers for Visual Editor
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Visual Editor API routes
+[[redirects]]
+  from = "/api/visual-editor/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+# Block configuration endpoint
+[[redirects]]
+  from = "/api/blocks"
+  to = "/api/page-config"
+  status = 200

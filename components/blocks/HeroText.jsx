@@ -9,7 +9,8 @@ const HeroText = ({
   secondText = "FOR PEOPLE.",
   showLine = true,
   className = "",
-  onAnimationComplete
+  onAnimationComplete,
+  ...props
 }) => {
   const textRef = useRef(null);
   const lineRef = useRef(null);
@@ -121,7 +122,11 @@ const HeroText = ({
   }, [firstText, secondText, showLine, onAnimationComplete]);
 
   return (
-    <div className={`text-center mb-28 pb-20 overflow-visible relative z-50 isolate flex flex-col items-center w-full ${className}`}>
+    <div
+      className={`text-center mb-28 pb-20 overflow-visible relative z-50 isolate flex flex-col items-center w-full ${className}`}
+      data-netlify-visual-editor-block="HeroText"
+      {...props}
+    >
       <div className="overflow-visible relative z-50 isolate">
         <h1
           ref={textRef}

@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, forwardRef, useImperativeHandle } from "react";
 import { gsap } from "gsap";
 
-const VideoBackground = forwardRef(({ videoSrc = "/assets/PPL.mp4", className = "" }, ref) => {
+const VideoBackground = forwardRef(({ videoSrc = "/assets/PPL.mp4", className = "", ...props }, ref) => {
   // Remove extension if present to get base path
   const basePath = videoSrc.replace(/\.(mp4|webm)$/, '');
   const videoRef = useRef(null);
@@ -30,7 +30,11 @@ const VideoBackground = forwardRef(({ videoSrc = "/assets/PPL.mp4", className = 
   }, []);
 
   return (
-    <div className={`fixed inset-0 -z-10 w-full h-full overflow-hidden ${className}`}>
+    <div
+      className={`fixed inset-0 -z-10 w-full h-full overflow-hidden ${className}`}
+      data-netlify-visual-editor-block="VideoBackground"
+      {...props}
+    >
       <video
         ref={videoRef}
         className="absolute min-w-full min-h-full object-cover"

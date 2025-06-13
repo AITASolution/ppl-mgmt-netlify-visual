@@ -12,7 +12,8 @@ const Logo = forwardRef(({
   centered = false,
   className = "",
   logoSrc = "/assets/logo/PPL-Logo.svg",
-  managementText = "Management & Records"
+  managementText = "Management & Records",
+  ...props
 }, ref) => {
   const router = useRouter();
   const logoRef = useRef(null);
@@ -56,6 +57,7 @@ const Logo = forwardRef(({
       ref={containerRef}
       className={`relative z-50 cursor-pointer hover:opacity-80 ${className}`}
       onClick={handleLogoClick}
+      data-netlify-visual-editor-block="Logo"
       style={{
         display: "flex",
         justifyContent: centered ? "center" : "flex-start",
@@ -65,6 +67,7 @@ const Logo = forwardRef(({
         transform: transparent ? "scale(1)" : "scale(0.85)",
         transition: "transform 0.4s ease-in-out",
       }}
+      {...props}
     >
       <div className="flex items-center">
         {/* Logo image */}

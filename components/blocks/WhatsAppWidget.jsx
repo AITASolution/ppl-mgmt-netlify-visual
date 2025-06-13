@@ -10,7 +10,8 @@ const WhatsAppWidget = ({
   size = 'medium',
   animationDelay = 5.25,
   isHomePage = false,
-  className = ""
+  className = "",
+  ...props
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
@@ -102,7 +103,12 @@ const WhatsAppWidget = ({
   };
 
   return (
-    <div ref={widgetRef} className={`fixed ${getPositionClasses()} z-[9999] ${className}`}>
+    <div
+      ref={widgetRef}
+      className={`fixed ${getPositionClasses()} z-[9999] ${className}`}
+      data-netlify-visual-editor-block="WhatsAppWidget"
+      {...props}
+    >
       {/* Tooltip */}
       {showTooltip && (
         <div className={`absolute ${position.includes('right') ? 'right-full mr-4' : 'left-full ml-4'} ${position.includes('bottom') ? 'bottom-0' : 'top-0'} bg-gray-800 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap shadow-lg`}>

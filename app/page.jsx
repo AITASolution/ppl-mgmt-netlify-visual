@@ -1,10 +1,16 @@
-import HomePage from '../components/HomePage.jsx';
+import VideoBackground from '../components/blocks/VideoBackground.jsx';
+import Logo from '../components/blocks/Logo.jsx';
+import HeroText from '../components/blocks/HeroText.jsx';
+import Navigation from '../components/blocks/Navigation.jsx';
+import Footer from '../components/blocks/Footer.jsx';
+import WhatsAppWidget from '../components/blocks/WhatsAppWidget.jsx';
 
 /**
  * Startseite für PPL Management & Records
  * Migriert von ppl-mgmt für Netlify Visual Editor
- *
- * Diese Seite wird dynamisch gerendert für Netlify Visual Editor Kompatibilität
+ * 
+ * Diese Seite wird dynamisch gerendert und verwendet einzelne Blöcke
+ * die im Visual Editor bearbeitet werden können
  */
 
 // Force dynamic rendering
@@ -35,27 +41,7 @@ export default async function Page() {
       video: { src: "/assets/PPL.mp4", overlay: true },
       logo: { src: "/assets/logo/PPL-Logo.svg", text: "Management & Records", transparent: true, centered: true },
       hero: { firstText: "FROM PEOPLE.", secondText: "FOR PEOPLE.", showLine: true },
-      navigation: [], // Wird unten definiert
-      footer: { email: 'info@ppl-mgmt.de', showSocialMedia: true, showLegalLinks: true, showCopyright: true },
-      whatsapp: { phoneNumber: '+491234567890', message: 'Hallo! Ich interessiere mich für Ihre Services.', position: 'bottom-right', size: 'medium' }
-    };
-  }
-
-  return (
-    <HomePage
-      // Video Background - dynamisch von API
-      videoSrc={pageConfig.video?.src || "/assets/PPL.mp4"}
-      
-      // Logo - dynamisch von API
-      logoSrc={pageConfig.logo?.src || "/assets/logo/PPL-Logo.svg"}
-      managementText={pageConfig.logo?.text || "Management & Records"}
-      
-      // Hero Text - dynamisch von API
-      firstText={pageConfig.hero?.firstText || "FROM PEOPLE."}
-      secondText={pageConfig.hero?.secondText || "FOR PEOPLE."}
-      
-      // Navigation Data - dynamisch von API
-      navigationData={pageConfig.navigation || [
+      navigation: [
         {
           label: "TALENT",
           items: [
@@ -95,17 +81,73 @@ export default async function Page() {
             { title: "Lifestyle Requests", path: "/travel/lifestyle" }
           ]
         }
-      ]}
+      ],
+      footer: { email: 'info@ppl-mgmt.de', social: { tiktok: 'https://tiktok.com/@ppl', instagram: 'https://instagram.com/ppl' }, showSocialMedia: true, showLegalLinks: true, showCopyright: true },
+      whatsapp: { phoneNumber: '+491234567890', message: 'Hallo! Ich interessiere mich für Ihre Services.', position: 'bottom-right', size: 'medium' }
+    };
+  }
+
+  return (
+    <div className="h-screen overflow-hidden relative">
+      {/* Video Background Block - editierbar im Visual Editor */}
+      <VideoBackground 
+        videoSrc={pageConfig.video?.src || "/assets/PPL.mp4"}
+        className=""
+      />
       
-      // Footer - dynamisch von API
-      emailAddress={pageConfig.footer?.email || "info@ppl-mgmt.de"}
-      tiktokUrl={pageConfig.footer?.social?.tiktok || "https://tiktok.com/@ppl"}
-      instagramUrl={pageConfig.footer?.social?.instagram || "https://instagram.com/ppl"}
+      {/* Logo Block - editierbar im Visual Editor */}
+      <div className="pl-4 pt-8 md:pl-12 md:pt-12 relative z-20">
+        <Logo 
+          enableHeroAnimation={true} 
+          centered={true}
+          logoSrc={pageConfig.logo?.src || "/assets/logo/PPL-Logo.svg"}
+          managementText={pageConfig.logo?.text || "Management & Records"}
+          transparent={pageConfig.logo?.transparent !== false}
+          className=""
+        />
+      </div>
       
-      // WhatsApp Widget - dynamisch von API
-      phoneNumber={pageConfig.whatsapp?.phoneNumber || "+491234567890"}
-      whatsappMessage={pageConfig.whatsapp?.message || "Hallo! Ich interessiere mich für Ihre Services."}
-    />
+      {/* Main Content Container */}
+      <main className="h-screen py-10 px-4 flex flex-col items-center justify-center relative z-10">
+        {/* Hero Text Block - editierbar im Visual Editor */}
+        <HeroText
+          firstText={pageConfig.hero?.firstText || "FROM PEOPLE."}
+          secondText={pageConfig.hero?.secondText || "FOR PEOPLE."}
+          showLine={pageConfig.hero?.showLine !== false}
+          className=""
+        />
+        
+        {/* Navigation Block - editierbar im Visual Editor */}
+        <Navigation
+          navigationData={pageConfig.navigation || []}
+          enableHeroAnimation={true}
+          className=""
+        />
+      </main>
+      
+      {/* Footer Block - editierbar im Visual Editor */}
+      <div className="fixed bottom-0 left-0 right-0 z-20 p-4">
+        <Footer 
+          emailAddress={pageConfig.footer?.email || "info@ppl-mgmt.de"}
+          tiktokUrl={pageConfig.footer?.social?.tiktok || "https://tiktok.com/@ppl"}
+          instagramUrl={pageConfig.footer?.social?.instagram || "https://instagram.com/ppl"}
+          showSocialMedia={pageConfig.footer?.showSocialMedia !== false}
+          showLegalLinks={pageConfig.footer?.showLegalLinks !== false}
+          showCopyright={pageConfig.footer?.showCopyright !== false}
+          className=""
+        />
+      </div>
+      
+      {/* WhatsApp Widget Block - editierbar im Visual Editor */}
+      <WhatsAppWidget
+        phoneNumber={pageConfig.whatsapp?.phoneNumber || "+491234567890"}
+        message={pageConfig.whatsapp?.message || "Hallo! Ich interessiere mich für Ihre Services."}
+        position={pageConfig.whatsapp?.position || "bottom-right"}
+        size={pageConfig.whatsapp?.size || "medium"}
+        isHomePage={true}
+        className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-[9999]"
+      />
+    </div>
   );
 }
 

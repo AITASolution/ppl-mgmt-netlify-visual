@@ -45,7 +45,8 @@ const defaultNavigationData = [
 const Navigation = forwardRef(({
   navigationData = defaultNavigationData,
   enableHeroAnimation = false,
-  className = ""
+  className = "",
+  ...props
 }, ref) => {
   const [activeMenu, setActiveMenu] = useState(null);
   const [menuOpened, setMenuOpened] = useState(false);
@@ -104,7 +105,12 @@ const Navigation = forwardRef(({
   };
 
   return (
-    <div className={`relative z-40 ${className}`} ref={menuRef}>
+    <div
+      className={`relative z-40 ${className}`}
+      ref={menuRef}
+      data-netlify-visual-editor-block="Navigation"
+      {...props}
+    >
       <div className="flex flex-col items-center gap-6 md:gap-8">
         {navigationData.map((menu, idx) => {
           const isActive = activeMenu === menu.label;
