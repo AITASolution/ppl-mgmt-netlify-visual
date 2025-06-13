@@ -3,23 +3,59 @@ import HomePage from '../components/HomePage.jsx';
 /**
  * Startseite für PPL Management & Records
  * Migriert von ppl-mgmt für Netlify Visual Editor
+ *
+ * Diese Seite wird dynamisch gerendert für Netlify Visual Editor Kompatibilität
  */
-export default function Page() {
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
+export default async function Page() {
+  // Dynamische Datenabfrage von API zur Laufzeit
+  let pageConfig;
+  
+  try {
+    // Fetch configuration from API (simuliert CMS/Headless System)
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/page-config`, {
+      cache: 'no-store' // Verhindert Caching für echte Dynamik
+    });
+    
+    if (!response.ok) {
+      throw new Error('Failed to fetch page config');
+    }
+    
+    const config = await response.json();
+    pageConfig = config.content;
+  } catch (error) {
+    console.error('Error fetching page config:', error);
+    
+    // Fallback-Konfiguration
+    pageConfig = {
+      video: { src: "/assets/PPL.mp4", overlay: true },
+      logo: { src: "/assets/logo/PPL-Logo.svg", text: "Management & Records", transparent: true, centered: true },
+      hero: { firstText: "FROM PEOPLE.", secondText: "FOR PEOPLE.", showLine: true },
+      navigation: [], // Wird unten definiert
+      footer: { email: 'info@ppl-mgmt.de', showSocialMedia: true, showLegalLinks: true, showCopyright: true },
+      whatsapp: { phoneNumber: '+491234567890', message: 'Hallo! Ich interessiere mich für Ihre Services.', position: 'bottom-right', size: 'medium' }
+    };
+  }
+
   return (
-    <HomePage 
-      // Video Background
-      videoSrc="/assets/PPL.mp4"
+    <HomePage
+      // Video Background - dynamisch von API
+      videoSrc={pageConfig.video?.src || "/assets/PPL.mp4"}
       
-      // Logo
-      logoSrc="/assets/logo/PPL-Logo.svg"
-      managementText="Management & Records"
+      // Logo - dynamisch von API
+      logoSrc={pageConfig.logo?.src || "/assets/logo/PPL-Logo.svg"}
+      managementText={pageConfig.logo?.text || "Management & Records"}
       
-      // Hero Text
-      firstText="FROM PEOPLE."
-      secondText="FOR PEOPLE."
+      // Hero Text - dynamisch von API
+      firstText={pageConfig.hero?.firstText || "FROM PEOPLE."}
+      secondText={pageConfig.hero?.secondText || "FOR PEOPLE."}
       
-      // Navigation Data
-      navigationData={[
+      // Navigation Data - dynamisch von API
+      navigationData={pageConfig.navigation || [
         {
           label: "TALENT",
           items: [
@@ -61,14 +97,14 @@ export default function Page() {
         }
       ]}
       
-      // Footer
-      emailAddress="info@ppl-mgmt.de"
-      tiktokUrl="https://tiktok.com/@ppl"
-      instagramUrl="https://instagram.com/ppl"
+      // Footer - dynamisch von API
+      emailAddress={pageConfig.footer?.email || "info@ppl-mgmt.de"}
+      tiktokUrl={pageConfig.footer?.social?.tiktok || "https://tiktok.com/@ppl"}
+      instagramUrl={pageConfig.footer?.social?.instagram || "https://instagram.com/ppl"}
       
-      // WhatsApp Widget
-      phoneNumber="+491234567890"
-      whatsappMessage="Hallo! Ich interessiere mich für Ihre Services."
+      // WhatsApp Widget - dynamisch von API
+      phoneNumber={pageConfig.whatsapp?.phoneNumber || "+491234567890"}
+      whatsappMessage={pageConfig.whatsapp?.message || "Hallo! Ich interessiere mich für Ihre Services."}
     />
   );
 }
