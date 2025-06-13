@@ -1,0 +1,88 @@
+{
+  "type": "object",
+  "title": "Navigation",
+  "description": "Hauptnavigation mit Untermenüs",
+  "properties": {
+    "navigationData": {
+      "type": "array",
+      "title": "Navigation Daten",
+      "description": "Array von Navigationsmenüs",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "title": "Menü Label"
+          },
+          "items": {
+            "type": "array",
+            "title": "Untermenü Items",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "title": "Titel"
+                },
+                "path": {
+                  "type": "string",
+                  "title": "Pfad"
+                }
+              },
+              "required": ["title", "path"]
+            }
+          }
+        },
+        "required": ["label", "items"]
+      },
+      "default": [
+        {
+          "label": "TALENT",
+          "items": [
+            { "title": "Artist Management", "path": "/talent/artist-management" },
+            { "title": "Booking Representation", "path": "/talent/booking" },
+            { "title": "Brand Collaborations", "path": "/talent/brands" }
+          ]
+        },
+        {
+          "label": "LIVE",
+          "items": [
+            { "title": "Event Production", "path": "/live/events" },
+            { "title": "Creative Consulting", "path": "/live/consulting" },
+            { "title": "Sponsorship Partnerships", "path": "/live/sponsorship" }
+          ]
+        },
+        {
+          "label": "BRANDS",
+          "items": [
+            { "title": "Brand Consulting", "path": "/brands/consulting" },
+            { "title": "Talent Partnerships", "path": "/brands/partnerships" },
+            { "title": "Fashion Development", "path": "/brands/fashion" }
+          ]
+        },
+        {
+          "label": "TRAVEL",
+          "items": [
+            { "title": "Full Concierge", "path": "/travel/concierge" },
+            { "title": "Private Jet Travel", "path": "/travel/jet" },
+            { "title": "VIP Transport", "path": "/travel/transport" }
+          ]
+        }
+      ]
+    },
+    "enableHeroAnimation": {
+      "type": "boolean",
+      "title": "Hero Animation aktivieren",
+      "description": "Aktiviert spezielle Animation für die Startseite",
+      "default": false
+    },
+    "className": {
+      "type": "string",
+      "title": "CSS Klassen",
+      "description": "Zusätzliche CSS-Klassen",
+      "default": ""
+    }
+  },
+  "required": ["navigationData"],
+  "additionalProperties": false
+}

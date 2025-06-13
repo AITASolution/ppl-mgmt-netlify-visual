@@ -1,0 +1,51 @@
+{
+  "type": "object",
+  "title": "Logo",
+  "description": "PPL Logo mit Management Text",
+  "properties": {
+    "transparent": {
+      "type": "boolean",
+      "title": "Transparenter Modus",
+      "description": "Aktiviert den transparenten Modus für größere Darstellung",
+      "default": true
+    },
+    "inHeader": {
+      "type": "boolean",
+      "title": "Im Header",
+      "description": "Kennzeichnet ob das Logo im Header verwendet wird",
+      "default": false
+    },
+    "enableHeroAnimation": {
+      "type": "boolean",
+      "title": "Hero Animation aktivieren",
+      "description": "Aktiviert spezielle Animation für die Startseite",
+      "default": false
+    },
+    "centered": {
+      "type": "boolean",
+      "title": "Zentriert",
+      "description": "Zentriert das Logo horizontal",
+      "default": false
+    },
+    "logoSrc": {
+      "type": "string",
+      "title": "Logo Bild URL",
+      "description": "Pfad zum Logo-Bild",
+      "default": "/assets/logo/PPL-Logo.svg"
+    },
+    "managementText": {
+      "type": "string",
+      "title": "Management Text",
+      "description": "Text neben dem Logo",
+      "default": "Management & Records"
+    },
+    "className": {
+      "type": "string",
+      "title": "CSS Klassen",
+      "description": "Zusätzliche CSS-Klassen",
+      "default": ""
+    }
+  },
+  "required": ["logoSrc", "managementText"],
+  "additionalProperties": false
+}

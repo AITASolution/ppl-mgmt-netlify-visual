@@ -1,0 +1,54 @@
+{
+  "type": "object",
+  "title": "Footer",
+  "description": "Website Footer mit Social Media Links und rechtlichen Hinweisen",
+  "properties": {
+    "emailAddress": {
+      "type": "string",
+      "title": "E-Mail Adresse",
+      "description": "Kontakt E-Mail Adresse",
+      "format": "email",
+      "default": "info@ppl-mgmt.de"
+    },
+    "tiktokUrl": {
+      "type": "string",
+      "title": "TikTok URL",
+      "description": "Link zum TikTok Profil",
+      "format": "uri",
+      "default": "https://tiktok.com/@ppl"
+    },
+    "instagramUrl": {
+      "type": "string",
+      "title": "Instagram URL",
+      "description": "Link zum Instagram Profil",
+      "format": "uri",
+      "default": "https://instagram.com/ppl"
+    },
+    "showSocialMedia": {
+      "type": "boolean",
+      "title": "Social Media anzeigen",
+      "description": "Zeigt die Social Media Icons",
+      "default": true
+    },
+    "showLegalLinks": {
+      "type": "boolean",
+      "title": "Rechtliche Links anzeigen",
+      "description": "Zeigt Datenschutz und Impressum Links",
+      "default": true
+    },
+    "showCopyright": {
+      "type": "boolean",
+      "title": "Copyright anzeigen",
+      "description": "Zeigt den Copyright-Hinweis",
+      "default": true
+    },
+    "className": {
+      "type": "string",
+      "title": "CSS Klassen",
+      "description": "Zusätzliche CSS-Klassen",
+      "default": ""
+    }
+  },
+  "required": ["emailAddress"],
+  "additionalProperties": false
+}

@@ -1,67 +1,89 @@
-import Link from 'next/link';
-import { Card } from 'components/card';
-import { ContextAlert } from 'components/context-alert';
-import { Markdown } from 'components/markdown';
-import { RandomQuote } from 'components/random-quote';
-import { getNetlifyContext } from 'utils';
+import HomePage from '../components/HomePage.jsx';
 
-const contextExplainer = `
-The card below is rendered on the server based on the value of \`process.env.CONTEXT\` 
-([docs](https://docs.netlify.com/configure-builds/environment-variables/#build-metadata)):
-`;
-
-const preDynamicContentExplainer = `
-The card content below is fetched by the client-side from \`/quotes/random\` (see file \`app/quotes/random/route.js\`) with a different quote shown on each page load:
-`;
-
-const postDynamicContentExplainer = `
-On Netlify, Next.js Route Handlers are automatically deployed as [Serverless Functions](https://docs.netlify.com/functions/overview/).
-Alternatively, you can add Serverless Functions to any site regardless of framework, with acccess to the [full context data](https://docs.netlify.com/functions/api/).
-
-And as always with dynamic content, beware of layout shifts & flicker! (here, we aren't...)
-`;
-
-const ctx = getNetlifyContext();
-
+/**
+ * Startseite für PPL Management & Records
+ * Migriert von ppl-mgmt für Netlify Visual Editor
+ */
 export default function Page() {
-    return (
-        <div className="flex flex-col gap-12 sm:gap-16">
-            <section>
-                <ContextAlert className="mb-6" />
-                <h1 className="mb-4">Netlify Platform Starter - Next.js</h1>
-                <p className="mb-6 text-lg">Get started with Next.js and Netlify in seconds.</p>
-                <Link href="https://docs.netlify.com/frameworks/next-js/overview/" className="btn btn-lg sm:min-w-64">
-                    Read the Docs
-                </Link>
-            </section>
-            {!!ctx && (
-                <section className="flex flex-col gap-4">
-                    <Markdown content={contextExplainer} />
-                    <RuntimeContextCard />
-                </section>
-            )}
-            <section className="flex flex-col gap-4">
-                <Markdown content={preDynamicContentExplainer} />
-                <RandomQuote />
-                <Markdown content={postDynamicContentExplainer} />
-            </section>
-        </div>
-    );
+  return (
+    <HomePage 
+      // Video Background
+      videoSrc="/assets/PPL.mp4"
+      
+      // Logo
+      logoSrc="/assets/logo/PPL-Logo.svg"
+      managementText="Management & Records"
+      
+      // Hero Text
+      firstText="FROM PEOPLE."
+      secondText="FOR PEOPLE."
+      
+      // Navigation Data
+      navigationData={[
+        {
+          label: "TALENT",
+          items: [
+            { title: "Artist Management", path: "/talent/artist-management" },
+            { title: "Booking Representation", path: "/talent/booking" },
+            { title: "Brand Collaborations", path: "/talent/brands" },
+            { title: "Talent Development", path: "/talent/development" },
+            { title: "Label A&R Services", path: "/talent/label-ar" },
+            { title: "Admin Legal Support", path: "/talent/admin-legal" }
+          ]
+        },
+        {
+          label: "LIVE",
+          items: [
+            { title: "Event Production", path: "/live/events" },
+            { title: "Creative Consulting", path: "/live/consulting" },
+            { title: "Sponsorship Partnerships", path: "/live/sponsorship" },
+            { title: "Modular Services", path: "/live/modular" },
+            { title: "Talent Booking", path: "/live/talent-booking" }
+          ]
+        },
+        {
+          label: "BRANDS",
+          items: [
+            { title: "Brand Consulting", path: "/brands/consulting" },
+            { title: "Brand Talent Partnerships", path: "/brands/partnerships" },
+            { title: "Fashion Brand Development", path: "/brands/fashion" }
+          ]
+        },
+        {
+          label: "TRAVEL",
+          items: [
+            { title: "Full Concierge", path: "/travel/concierge" },
+            { title: "Private Jet Travel", path: "/travel/jet" },
+            { title: "VIP Transport Logistics", path: "/travel/transport" },
+            { title: "Hotel Stay", path: "/travel/hotel" },
+            { title: "Lifestyle Requests", path: "/travel/lifestyle" }
+          ]
+        }
+      ]}
+      
+      // Footer
+      emailAddress="info@ppl-mgmt.de"
+      tiktokUrl="https://tiktok.com/@ppl"
+      instagramUrl="https://instagram.com/ppl"
+      
+      // WhatsApp Widget
+      phoneNumber="+491234567890"
+      whatsappMessage="Hallo! Ich interessiere mich für Ihre Services."
+    />
+  );
 }
 
-function RuntimeContextCard() {
-    const title = `Netlify Context: running in ${ctx} mode.`;
-    if (ctx === 'dev') {
-        return (
-            <Card title={title}>
-                <p>Next.js will rebuild any page you navigate to, including static pages.</p>
-            </Card>
-        );
-    } else {
-        return (
-            <Card title={title}>
-                <p>This page was statically-generated at build time.</p>
-            </Card>
-        );
-    }
-}
+/**
+ * Metadata für die Seite
+ */
+export const metadata = {
+  title: 'PPL Management & Records - FROM PEOPLE. FOR PEOPLE.',
+  description: 'PPL Management & Records bietet umfassende Services in den Bereichen Talent Management, Live Events, Brand Consulting und Travel Concierge.',
+  keywords: 'PPL, Management, Records, Talent, Live Events, Brand Consulting, Travel, Concierge',
+  openGraph: {
+    title: 'PPL Management & Records',
+    description: 'FROM PEOPLE. FOR PEOPLE.',
+    type: 'website',
+    locale: 'de_DE',
+  },
+};

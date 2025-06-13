@@ -1,0 +1,54 @@
+{
+  "type": "object",
+  "title": "WhatsApp Widget",
+  "description": "Schwebendes WhatsApp Kontakt-Widget",
+  "properties": {
+    "phoneNumber": {
+      "type": "string",
+      "title": "Telefonnummer",
+      "description": "WhatsApp Telefonnummer (mit Ländercode)",
+      "default": "+491234567890"
+    },
+    "message": {
+      "type": "string",
+      "title": "Standard Nachricht",
+      "description": "Vorgefüllte Nachricht für WhatsApp",
+      "default": "Hallo! Ich interessiere mich für Ihre Services."
+    },
+    "position": {
+      "type": "string",
+      "title": "Position",
+      "description": "Position des Widgets auf der Seite",
+      "enum": ["bottom-right", "bottom-left", "top-right", "top-left"],
+      "default": "bottom-right"
+    },
+    "size": {
+      "type": "string",
+      "title": "Größe",
+      "description": "Größe des Widgets",
+      "enum": ["small", "medium", "large"],
+      "default": "medium"
+    },
+    "animationDelay": {
+      "type": "number",
+      "title": "Animation Verzögerung",
+      "description": "Verzögerung in Sekunden vor der Einblendung",
+      "minimum": 0,
+      "default": 5.25
+    },
+    "isHomePage": {
+      "type": "boolean",
+      "title": "Ist Startseite",
+      "description": "Kennzeichnet ob das Widget auf der Startseite verwendet wird",
+      "default": false
+    },
+    "className": {
+      "type": "string",
+      "title": "CSS Klassen",
+      "description": "Zusätzliche CSS-Klassen",
+      "default": ""
+    }
+  },
+  "required": ["phoneNumber", "message"],
+  "additionalProperties": false
+}
