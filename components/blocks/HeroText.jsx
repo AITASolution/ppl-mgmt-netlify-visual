@@ -2,9 +2,10 @@
 
 import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
+import { defineBlockComponent } from '@netlify/visual-editing';
 import { SECONDARY_COLOR } from "../../lib/constants";
 
-const HeroText = ({
+const HeroTextImpl = ({
   firstText = "FROM PEOPLE.",
   secondText = "FOR PEOPLE.",
   showLine = true,
@@ -14,9 +15,12 @@ const HeroText = ({
 }) => {
   const textRef = useRef(null);
   const lineRef = useRef(null);
+  
+  // Detect if we're in editing mode
+  const isEditing = typeof window !== 'undefined' && window.location.search.includes('editing=true');
 
   useEffect(() => {
-    if (!textRef.current || !lineRef.current) return;
+    if (!textRef.current || !lineRef.current || isEditing) return;
 
     // Text in einzelne Buchstaben aufteilen
     const firstChars = firstText.split("");
@@ -119,20 +123,36 @@ const HeroText = ({
     return () => {
       heroTextTimeline.kill();
     };
-  }, [firstText, secondText, showLine, onAnimationComplete]);
+  }, [firstText, secondText, showLine, onAnimationComplete, isEditing]);
 
   return (
-    <div
+    <div 
       className={`text-center mb-28 pb-20 overflow-visible relative z-50 isolate flex flex-col items-center w-full ${className}`}
-      data-netlify-visual-editor-block="HeroText"
       {...props}
     >
       <div className="overflow-visible relative z-50 isolate">
         <h1
           ref={textRef}
           className="font-serif text-3xl md:text-5xl lg:text-7xl md:mt-24 font-bold text-black pt-10 leading-tight overflow-visible relative z-50 isolate"
+          data-sb-field-path="firstText,secondText"
         >
-          {/* Text wird durch JavaScript ersetzt */}
+          {/* In editing mode, show editable text */}
+          {isEditing ? (
+            <>
+              <span className="text-black" data-sb-field-path="firstText">{firstText}</span>
+              <span className="hidden md:inline">&nbsp;</span>
+              <span 
+                className="font-bold highlight-underline block md:inline" 
+                style={{ color: SECONDARY_COLOR }}
+                data-sb-field-path="secondText"
+              >
+                {secondText}
+              </span>
+            </>
+          ) : (
+            /* Text wird durch JavaScript ersetzt */
+            null
+          )}
         </h1>
         {/* Animierte schwarze Linie */}
         {showLine && (
@@ -141,11 +161,17 @@ const HeroText = ({
             className="block mx-auto mt-[18px] h-1 w-[60vw] max-w-3xl bg-black rounded-full"
             style={{ transformOrigin: "center" }}
             aria-hidden="true"
+            data-sb-field-path="showLine"
           />
         )}
       </div>
     </div>
   );
 };
+
+export const HeroText = defineBlockComponent(HeroTextImpl, {
+  label: 'Hero Text',
+  schema: './HeroText.schema.json'
+});
 
 export default HeroText;

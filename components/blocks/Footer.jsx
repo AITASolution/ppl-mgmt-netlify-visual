@@ -2,8 +2,9 @@
 
 import React from 'react';
 import { Mail, Instagram } from 'lucide-react';
+import { defineBlockComponent } from '@netlify/visual-editing';
 
-const Footer = ({
+const FooterImpl = ({
   emailAddress = "info@ppl-mgmt.de",
   tiktokUrl = "https://tiktok.com/@ppl",
   instagramUrl = "https://instagram.com/ppl",
@@ -16,9 +17,8 @@ const Footer = ({
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer
+    <footer 
       className={`space-y-4 ${className}`}
-      data-netlify-visual-editor-block="Footer"
       {...props}
     >
       {/* Social Media Icons */}
@@ -28,6 +28,7 @@ const Footer = ({
             href={`mailto:${emailAddress}`}
             className="text-gray-400 hover:text-gray-600 transition-colors"
             aria-label="E-Mail kontaktieren"
+            data-sb-field-path="emailAddress"
           >
             <Mail size={20} />
           </a>
@@ -37,6 +38,7 @@ const Footer = ({
             rel="noopener noreferrer"
             className="text-gray-400 hover:text-gray-600 transition-colors"
             aria-label="TikTok folgen"
+            data-sb-field-path="tiktokUrl"
           >
             <svg
               width="20"
@@ -54,6 +56,7 @@ const Footer = ({
             rel="noopener noreferrer"
             className="text-gray-400 hover:text-gray-600 transition-colors"
             aria-label="Instagram folgen"
+            data-sb-field-path="instagramUrl"
           >
             <Instagram size={20} />
           </a>
@@ -87,5 +90,10 @@ const Footer = ({
     </footer>
   );
 };
+
+export const Footer = defineBlockComponent(FooterImpl, {
+  label: 'Footer',
+  schema: './Footer.schema.json'
+});
 
 export default Footer;

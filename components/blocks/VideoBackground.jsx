@@ -2,12 +2,16 @@
 
 import React, { useEffect, useRef, forwardRef, useImperativeHandle } from "react";
 import { gsap } from "gsap";
+import { defineBlockComponent } from '@netlify/visual-editing';
 
-const VideoBackground = forwardRef(({ videoSrc = "/assets/PPL.mp4", className = "", ...props }, ref) => {
+const VideoBackgroundImpl = forwardRef(({ videoSrc = "/assets/PPL.mp4", className = "", ...props }, ref) => {
   // Remove extension if present to get base path
   const basePath = videoSrc.replace(/\.(mp4|webm)$/, '');
   const videoRef = useRef(null);
   const overlayRef = useRef(null);
+
+  // Detect if we're in editing mode
+  const isEditing = typeof window !== 'undefined' && window.location.search.includes('editing=true');
 
   useImperativeHandle(ref, () => ({
     videoElement: videoRef.current,
@@ -15,8 +19,8 @@ const VideoBackground = forwardRef(({ videoSrc = "/assets/PPL.mp4", className = 
   }));
 
   useEffect(() => {
-    // Initial state: Video und Overlay unsichtbar für Animation
-    if (videoRef.current && overlayRef.current) {
+    // Initial state: Video und Overlay unsichtbar für Animation (außer im Editing-Modus)
+    if (videoRef.current && overlayRef.current && !isEditing) {
       gsap.set(videoRef.current, { opacity: 0 });
       gsap.set(overlayRef.current, { opacity: 0 });
     }
@@ -27,12 +31,11 @@ const VideoBackground = forwardRef(({ videoSrc = "/assets/PPL.mp4", className = 
         console.error("Video autoplay failed:", error);
       });
     }
-  }, []);
+  }, [isEditing]);
 
   return (
-    <div
+    <div 
       className={`fixed inset-0 -z-10 w-full h-full overflow-hidden ${className}`}
-      data-netlify-visual-editor-block="VideoBackground"
       {...props}
     >
       <video
@@ -42,6 +45,8 @@ const VideoBackground = forwardRef(({ videoSrc = "/assets/PPL.mp4", className = 
         loop
         playsInline
         muted
+        style={{ opacity: isEditing ? 1 : undefined }}
+        data-sb-field-path="videoSrc"
       >
         <source src={`${basePath}.webm`} type="video/webm" />
         <source src={`${basePath}.mp4`} type="video/mp4" />
@@ -51,12 +56,20 @@ const VideoBackground = forwardRef(({ videoSrc = "/assets/PPL.mp4", className = 
       <div 
         ref={overlayRef}
         className="absolute inset-0 bg-warm-bg bg-opacity-75"
-        style={{ backgroundColor: 'rgba(242, 234, 223, 0.75)' }}
+        style={{ 
+          backgroundColor: 'rgba(242, 234, 223, 0.75)',
+          opacity: isEditing ? 1 : undefined
+        }}
       />
     </div>
   );
 });
 
-VideoBackground.displayName = 'VideoBackground';
+VideoBackgroundImpl.displayName = 'VideoBackgroundImpl';
+
+export const VideoBackground = defineBlockComponent(VideoBackgroundImpl, {
+  label: 'Video Background',
+  schema: './VideoBackground.schema.json'
+});
 
 export default VideoBackground;

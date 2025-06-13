@@ -2,8 +2,9 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
+import { defineBlockComponent } from '@netlify/visual-editing';
 
-const WhatsAppWidget = ({
+const WhatsAppWidgetImpl = ({
   phoneNumber = '+491234567890',
   message = 'Hallo! Ich interessiere mich für Ihre Services.',
   position = 'bottom-right',
@@ -17,9 +18,12 @@ const WhatsAppWidget = ({
   const [showTooltip, setShowTooltip] = useState(false);
   const widgetRef = useRef(null);
 
+  // Detect if we're in editing mode
+  const isEditing = typeof window !== 'undefined' && window.location.search.includes('editing=true');
+
   // Initial Animation Effect
   useEffect(() => {
-    if (widgetRef.current) {
+    if (widgetRef.current && !isEditing) {
       if (isHomePage) {
         // Auf HomePage: Nur Initial State setzen, Master Timeline übernimmt Animation
         gsap.set(widgetRef.current, {
@@ -70,7 +74,7 @@ const WhatsAppWidget = ({
         });
       }
     }
-  }, [animationDelay, isHomePage]);
+  }, [animationDelay, isHomePage, isEditing]);
 
   const handleWhatsAppClick = () => {
     const encodedMessage = encodeURIComponent(message);
@@ -103,10 +107,10 @@ const WhatsAppWidget = ({
   };
 
   return (
-    <div
-      ref={widgetRef}
+    <div 
+      ref={widgetRef} 
       className={`fixed ${getPositionClasses()} z-[9999] ${className}`}
-      data-netlify-visual-editor-block="WhatsAppWidget"
+      style={{ opacity: isEditing ? 1 : undefined }}
       {...props}
     >
       {/* Tooltip */}
@@ -138,6 +142,7 @@ const WhatsAppWidget = ({
           ${isHovered ? 'animate-pulse' : ''}
         `}
         aria-label="WhatsApp Support kontaktieren"
+        data-sb-field-path="phoneNumber,message"
       >
         {/* WhatsApp Icon SVG */}
         <svg
@@ -152,5 +157,10 @@ const WhatsAppWidget = ({
     </div>
   );
 };
+
+export const WhatsAppWidget = defineBlockComponent(WhatsAppWidgetImpl, {
+  label: 'WhatsApp Widget',
+  schema: './WhatsAppWidget.schema.json'
+});
 
 export default WhatsAppWidget;

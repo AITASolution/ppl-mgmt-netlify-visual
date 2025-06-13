@@ -3,9 +3,10 @@
 import React, { forwardRef, useImperativeHandle, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { gsap } from "gsap";
+import { defineBlockComponent } from '@netlify/visual-editing';
 import { SECONDARY_COLOR } from "../../lib/constants";
 
-const Logo = forwardRef(({
+const LogoImpl = forwardRef(({
   transparent = true,
   inHeader = false,
   enableHeroAnimation = false,
@@ -21,6 +22,9 @@ const Logo = forwardRef(({
   const mobileTextRef = useRef(null);
   const containerRef = useRef(null);
 
+  // Detect if we're in editing mode
+  const isEditing = typeof window !== 'undefined' && window.location.search.includes('editing=true');
+
   useImperativeHandle(ref, () => ({
     logoElement: logoRef.current,
     textElement: textRef.current,
@@ -29,7 +33,7 @@ const Logo = forwardRef(({
 
   useEffect(() => {
     // Initial state: Logo und Text nur unsichtbar wenn Hero-Animation aktiviert ist
-    if (enableHeroAnimation && logoRef.current && textRef.current) {
+    if (enableHeroAnimation && logoRef.current && textRef.current && !isEditing) {
       gsap.set(logoRef.current, { opacity: 0, scale: 0.8 });
       gsap.set(textRef.current, { opacity: 0, y: 20 });
       // Mobile Text auch unsichtbar setzen falls vorhanden
@@ -37,7 +41,7 @@ const Logo = forwardRef(({
         gsap.set(mobileTextRef.current, { opacity: 0, y: 20 });
       }
     }
-  }, [enableHeroAnimation]);
+  }, [enableHeroAnimation, isEditing]);
 
   const handleLogoClick = () => {
     router.push("/");
@@ -57,7 +61,6 @@ const Logo = forwardRef(({
       ref={containerRef}
       className={`relative z-50 cursor-pointer hover:opacity-80 ${className}`}
       onClick={handleLogoClick}
-      data-netlify-visual-editor-block="Logo"
       style={{
         display: "flex",
         justifyContent: centered ? "center" : "flex-start",
@@ -77,7 +80,7 @@ const Logo = forwardRef(({
           style={{
             transformOrigin: 'left center',
             transform: transparent ? 'scale(1)' : 'scale(0.9)',
-            opacity: enableHeroAnimation ? 0 : 1,
+            opacity: (enableHeroAnimation && !isEditing) ? 0 : 1,
             transition: 'transform 0.4s ease-in-out, opacity 0.4s ease-in-out'
           }}
         >
@@ -89,6 +92,7 @@ const Logo = forwardRef(({
               filter: transparent ? 'brightness(1)' : 'brightness(1.05)',
               transition: 'filter 0.4s ease-in-out'
             }}
+            data-sb-field-path="logoSrc"
           />
         </div>
         
@@ -100,7 +104,7 @@ const Logo = forwardRef(({
           style={{
             transformOrigin: 'left center',
             transform: transparent ? 'scale(1)' : 'scale(0.9)',
-            opacity: enableHeroAnimation ? 0 : (transparent ? 1 : 0.95),
+            opacity: (enableHeroAnimation && !isEditing) ? 0 : (transparent ? 1 : 0.95),
             transition: 'transform 0.4s ease-in-out, opacity 0.4s ease-in-out'
           }}
         >
@@ -116,6 +120,7 @@ const Logo = forwardRef(({
               transform: transparent ? 'scaleY(1)' : 'scaleY(0.95)',
               transition: 'letter-spacing 0.4s ease-in-out, transform 0.4s ease-in-out'
             }}
+            data-sb-field-path="managementText"
           >
             {managementText}
           </span>
@@ -129,7 +134,7 @@ const Logo = forwardRef(({
             style={{
               transformOrigin: 'left center',
               transform: transparent ? 'scale(1)' : 'scale(0.9)',
-              opacity: enableHeroAnimation ? 0 : 1,
+              opacity: (enableHeroAnimation && !isEditing) ? 0 : 1,
               transition: 'transform 0.3s ease-in-out, opacity 0.3s ease-in-out'
             }}
           >
@@ -145,6 +150,7 @@ const Logo = forwardRef(({
                 transform: transparent ? 'scaleY(1)' : 'scaleY(0.95)',
                 transition: 'letter-spacing 0.3s ease-in-out, transform 0.3s ease-in-out'
               }}
+              data-sb-field-path="managementText"
             >
               {managementText}
             </span>
@@ -166,6 +172,11 @@ const Logo = forwardRef(({
   );
 });
 
-Logo.displayName = 'Logo';
+LogoImpl.displayName = 'LogoImpl';
+
+export const Logo = defineBlockComponent(LogoImpl, {
+  label: 'Logo',
+  schema: './Logo.schema.json'
+});
 
 export default Logo;
